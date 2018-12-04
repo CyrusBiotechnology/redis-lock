@@ -33,12 +33,12 @@ pipeline {
             parallel {
                 stage('unit test container') {
                     steps {
-                        sh "docker build -f docker/tests.df . -t redis-lock-tests:latest"
+                        sh "docker build -f docker/tests.df . -t redis-lock-tests:${IMAGE_TAG}"
                     }
                 }
                 stage('package publisher container') {
                     steps {
-                        sh "docker build -f docker/push-client.df . -t push-redis-lock:latest"
+                        sh "docker build -f docker/push-to-artifactory.df . -t redis-lock-publish:${IMAGE_TAG}"
                     }
                 }
             }
@@ -46,14 +46,14 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                sh "docker run redis-lock-tests:latest"
+                sh "docker run redis-lock-tests:${IMAGE_TAG}"
             }
         }
 
         stage('Push redis-lock package to artifactory') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'Artifactory', usernameVariable: 'ARTI_NAME', passwordVariable: 'ARTI_PASS')]) {
-                    sh "docker run -e ARTI_NAME=$ARTI_NAME -e ARTI_PASS=$ARTI_PASS push-redis-lock:latest"
+                    sh "docker run -e ARTI_NAME=$ARTI_NAME -e ARTI_PASS=$ARTI_PASS redis-lock-publish:${IMAGE_TAG}"
                 }
             }
         }
