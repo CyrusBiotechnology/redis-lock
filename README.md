@@ -1,8 +1,6 @@
 redis-lock
 ==========
 
-[![Build Status](https://travis-ci.org/errorception/redis-lock.svg)](https://travis-ci.org/errorception/redis-lock)
-
 Implements a locking primitive using redis in node.js.
 
 Fully non-blocking and asynchronous, and uses the algorithm described in the [redis docs](https://redis.io/commands/setnx).
