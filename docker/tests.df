@@ -4,7 +4,7 @@ WORKDIR /redis-lock
 
 COPY package.json ./
 COPY index.js ./
-COPY test ./
+COPY test ./test
 
 RUN npm install
 
