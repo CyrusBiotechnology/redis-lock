@@ -3,8 +3,6 @@
 def GIT_BRANCH = ''
 def IMAGE_REF = ''
 def IMAGE_TAG = ''
-def VERSION = ''
-def NAMESPACE = ''
 
 pipeline {
     agent any
@@ -19,12 +17,6 @@ pipeline {
                     IMAGE_REF=docker2.imageRef()
                     IMAGE_TAG=IMAGE_REF.split(':').last()
                     GIT_BRANCH = env.BRANCH_NAME.replace('/', '').replace('_', '').replace('-', '')
-
-                    if (env.BRANCH_NAME == 'master') {
-                        VERSION = env.BUILD_ID}
-                    else {
-                        VERSION = env.BUILD_ID +  GIT_BRANCH
-                    }
                 }
             }
         }
