@@ -44,8 +44,10 @@ pipeline {
 
         stage('Push redis-lock package to artifactory') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Artifactory', usernameVariable: 'ARTI_NAME', passwordVariable: 'ARTI_PASS')]) {
-                    sh "docker run -e ARTI_NAME=$ARTI_NAME -e ARTI_PASS=$ARTI_PASS redis-lock-publish:${IMAGE_TAG}"
+                if (env.BRANCH_NAME == 'master') {
+                    withCredentials([usernamePassword(credentialsId: 'Artifactory', usernameVariable: 'ARTI_NAME', passwordVariable: 'ARTI_PASS')]) {
+                        sh "docker run -e ARTI_NAME=$ARTI_NAME -e ARTI_PASS=$ARTI_PASS redis-lock-publish:${IMAGE_TAG}"
+                    }
                 }
             }
         }
